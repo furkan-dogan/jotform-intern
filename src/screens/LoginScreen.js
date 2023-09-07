@@ -9,10 +9,12 @@ import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import {emailValidator} from '../helpers/emailValidator';
 import {passwordValidator} from '../helpers/passwordValidator';
+import {FIREBASE_AUTH} from '../../FirebaseConfig';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
+  const auth = FIREBASE_AUTH;
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value);
