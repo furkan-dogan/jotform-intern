@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
+import {Button} from 'react-native';
 import Background from '../components/Background';
 import BackButton from '../components/BackButton';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
-import Button from '../components/Button';
 import {emailValidator} from '../helpers/emailValidator';
 
 export default function ResetPasswordScreen({navigation}) {
@@ -16,7 +16,7 @@ export default function ResetPasswordScreen({navigation}) {
       setEmail({...email, error: emailError});
       return;
     }
-    navigation.navigate('LoginScreen');
+    navigation.navigate('StartScreen');
   };
 
   return (
@@ -38,11 +38,10 @@ export default function ResetPasswordScreen({navigation}) {
         description="You will receive email with password reset link."
       />
       <Button
+        title="Send Instructions"
         mode="contained"
         onPress={sendResetPasswordEmail}
-        style={{marginTop: 16}}>
-        Send Instructions
-      </Button>
+        style={{marginTop: 16}}></Button>
     </Background>
   );
 }

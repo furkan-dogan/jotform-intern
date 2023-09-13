@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {TextInput as Input} from 'react-native-paper';
-import {blue, red} from 'react-native-reanimated';
+import {blue} from 'react-native-reanimated';
 
 export default function TextInput({errorText, description, ...props}) {
   return (

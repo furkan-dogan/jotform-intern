@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Button} from 'react-native';
 import {Text} from 'react-native-paper';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
-import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import {emailValidator} from '../helpers/emailValidator';
@@ -29,7 +28,7 @@ export default function RegisterScreen({navigation}) {
     }
     navigation.reset({
       index: 0,
-      routes: [{name: 'Dashboard'}],
+      routes: [{name: 'HomePage'}],
     });
   };
 
@@ -37,9 +36,9 @@ export default function RegisterScreen({navigation}) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Create Account</Header>
+      <Header>Ücretsiz hesap oluştur</Header>
       <TextInput
-        label="Name"
+        label="İsim Soyisim"
         returnKeyType="next"
         value={name.value}
         onChangeText={text => setName({value: text, error: ''})}
@@ -47,7 +46,7 @@ export default function RegisterScreen({navigation}) {
         errorText={name.error}
       />
       <TextInput
-        label="Email"
+        label="E-posta"
         returnKeyType="next"
         value={email.value}
         onChangeText={text => setEmail({value: text, error: ''})}
@@ -59,7 +58,7 @@ export default function RegisterScreen({navigation}) {
         keyboardType="email-address"
       />
       <TextInput
-        label="Password"
+        label="Şifre"
         returnKeyType="done"
         value={password.value}
         onChangeText={text => setPassword({value: text, error: ''})}
@@ -68,17 +67,10 @@ export default function RegisterScreen({navigation}) {
         secureTextEntry
       />
       <Button
+        title="Kayıt ol"
         mode="contained"
         onPress={onSignUpPressed}
-        style={{marginTop: 24}}>
-        Sign Up
-      </Button>
-      <View style={styles.row}>
-        <Text>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
-          <Text style={styles.link}>Login</Text>
-        </TouchableOpacity>
-      </View>
+        style={{marginTop: 24}}></Button>
     </Background>
   );
 }

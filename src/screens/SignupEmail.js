@@ -1,20 +1,17 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, Button} from 'react-native';
 import {Text} from 'react-native-paper';
 import Background from '../components/Background';
-import Logo from '../components/Logo';
 import Header from '../components/Header';
-import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import {emailValidator} from '../helpers/emailValidator';
 import {passwordValidator} from '../helpers/passwordValidator';
-import {FIREBASE_AUTH} from '../../FirebaseConfig';
+import {Icon} from '@rneui/themed';
 
-export default function LoginScreen({navigation}) {
+export default function SignupEmail({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
-  const auth = FIREBASE_AUTH;
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -26,49 +23,63 @@ export default function LoginScreen({navigation}) {
     }
     navigation.reset({
       index: 0,
-      routes: [{name: 'Dashboard'}],
+      routes: [{name: 'HomePage'}],
     });
   };
 
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Logo />
-      <Header>Welcome back.</Header>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>
+            {' '}
+            <Icon name="google" />
+            Button 1
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Button 2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Button 3</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Button 4</Text>
+        </TouchableOpacity>
+      </View>
+      <Text>veya</Text>
+      <Header>Veri toplamaya başlamak için kaydolun.</Header>
       <TextInput
-        label="Email"
+        label="Kullanıcı Adı veya E-posta"
         returnKeyType="next"
-        value={email.value}
         onChangeText={text => setEmail({value: text, error: ''})}
-        error={!!email.error}
-        errorText={email.error}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
         keyboardType="email-address"
       />
       <TextInput
-        label="Password"
+        label="Şifre"
         returnKeyType="done"
         value={password.value}
         onChangeText={text => setPassword({value: text, error: ''})}
-        error={!!password.error}
-        errorText={password.error}
         secureTextEntry
       />
       <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}>
-          <Text style={styles.forgot}>Forgot your password?</Text>
+          <Text style={styles.forgot}>Parolamı unuttum</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
-        Login
-      </Button>
+      <Button
+        title="E-posta ile giriş yap"
+        mode="contained"
+        onPress={() => navigation.navigate('HomePage')}></Button>
       <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
+        <Text>Hesabınız yok mu? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.link}> Kaydol</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -76,6 +87,21 @@ export default function LoginScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row', // Butonları yatay olarak sıralar
+    justifyContent: 'space-between', // Boşlukları eşit olarak dağıtır
+    paddingHorizontal: 20, // Butonlar arasına yatay boşluk ekler
+    marginTop: 20,
+  },
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    width: '23%', // Butonların eşit genişlikte olmasını sağlar
+  },
+  buttonText: {
+    color: 'black',
+    textAlign: 'center',
+  },
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',
