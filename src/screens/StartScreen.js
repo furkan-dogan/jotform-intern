@@ -1,33 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, StyleSheet, Button, View} from 'react-native';
+import React, {useState} from 'react';
+import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {Button} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import {emailValidator} from '../helpers/emailValidator';
 import {passwordValidator} from '../helpers/passwordValidator';
-import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function StartScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
-
-  useEffect(() => {
-    const apiUrl =
-      'https://api.jotform.com/user/forms?apikey=2eacf50a8d83d73bb9bba97a6f76b6e4'; // İstek atacağınız API'nin URL'si
-
-    // GET isteği gönderme
-    axios
-      .get(apiUrl)
-      .then(function (response) {
-        // İstek başarılı olduğunda burası çalışır
-        console.log('Başarılı istek:', response.data);
-      })
-      .catch(function (error) {
-        // İstek başarısız olduğunda burası çalışır
-        console.error('Hata:', error);
-      });
-  }, []);
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -47,20 +31,28 @@ export default function StartScreen({navigation}) {
     <Background>
       <Logo />
       <Header>Veri toplamaya başlamak için kaydolun.</Header>
-      <View style={styles.viewButtons}>
-        <Button title="Google ile kaydol" mode="contained"></Button>
-        <Button title="Facebook ile kaydol" mode="contained"></Button>
+      <View style={{padding: 16}}>
+        <Button mode="outlined" onPress={() => navigation.navigate('')}>
+          <Icon name="google" size={20} color="black" />
+          Google ile kaydol
+        </Button>
+      </View>
+
+      <View style={{padding: 16}}>
+        <Button mode="outlined" onPress={() => navigation.navigate('')}>
+          <Icon name="google" size={20} color="black" />
+          Facebook ile kaydol
+        </Button>
       </View>
 
       <Text>veya</Text>
 
-      <Button
-        title="E-posta ile kaydol"
-        mode="contained"
-        onPress={() => navigation.navigate('RegisterScreen')}></Button>
+      <Button mode="contained" onPress={() => navigation.navigate('Register')}>
+        E-posta ile kaydol
+      </Button>
       <View style={styles.row}>
         <Text>Hesabınız var mı?</Text>
-        <TouchableOpacity onPress={() => navigation.replace('SignupEmail')}>
+        <TouchableOpacity onPress={() => navigation.replace('LoginWithEmail')}>
           <Text style={styles.link}> Giriş yapın</Text>
         </TouchableOpacity>
       </View>

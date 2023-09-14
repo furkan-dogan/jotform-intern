@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Button} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet, Button} from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
@@ -11,7 +10,7 @@ import {passwordValidator} from '../helpers/passwordValidator';
 import {nameValidator} from '../helpers/nameValidator';
 import {blue} from 'react-native-reanimated';
 
-export default function RegisterScreen({navigation}) {
+export default function Register({navigation}) {
   const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
@@ -26,10 +25,6 @@ export default function RegisterScreen({navigation}) {
       setPassword({...password, error: passwordError});
       return;
     }
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'HomePage'}],
-    });
   };
 
   return (

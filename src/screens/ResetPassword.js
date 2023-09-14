@@ -7,7 +7,7 @@ import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import {emailValidator} from '../helpers/emailValidator';
 
-export default function ResetPasswordScreen({navigation}) {
+export default function ResetPassword({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
 
   const sendResetPasswordEmail = () => {
