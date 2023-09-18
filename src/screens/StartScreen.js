@@ -5,8 +5,6 @@ import {Text} from 'react-native-paper';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
-import {emailValidator} from '../helpers/emailValidator';
-import {passwordValidator} from '../helpers/passwordValidator';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function StartScreen({navigation}) {
@@ -14,8 +12,6 @@ export default function StartScreen({navigation}) {
   const [password, setPassword] = useState({value: '', error: ''});
 
   const onLoginPressed = () => {
-    const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
     if (emailError || passwordError) {
       setEmail({...email, error: emailError});
       setPassword({...password, error: passwordError});

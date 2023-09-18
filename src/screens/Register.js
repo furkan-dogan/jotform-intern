@@ -5,9 +5,6 @@ import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
-import {emailValidator} from '../helpers/emailValidator';
-import {passwordValidator} from '../helpers/passwordValidator';
-import {nameValidator} from '../helpers/nameValidator';
 import {blue} from 'react-native-reanimated';
 
 export default function Register({navigation}) {
@@ -16,9 +13,6 @@ export default function Register({navigation}) {
   const [password, setPassword] = useState({value: '', error: ''});
 
   const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value);
-    const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
     if (emailError || passwordError || nameError) {
       setName({...name, error: nameError});
       setEmail({...email, error: emailError});

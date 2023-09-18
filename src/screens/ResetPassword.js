@@ -5,19 +5,9 @@ import BackButton from '../components/BackButton';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
-import {emailValidator} from '../helpers/emailValidator';
 
 export default function ResetPassword({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
-
-  const sendResetPasswordEmail = () => {
-    const emailError = emailValidator(email.value);
-    if (emailError) {
-      setEmail({...email, error: emailError});
-      return;
-    }
-    navigation.navigate('StartScreen');
-  };
 
   return (
     <Background>

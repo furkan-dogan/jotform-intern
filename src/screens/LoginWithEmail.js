@@ -4,7 +4,6 @@ import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import BackButton from '../components/BackButton';
 import {useNavigation} from '@react-navigation/native';
-import {setAppKey} from '../redux/actions';
 
 export default function LoginWithEmail() {
   const dispatch = useDispatch();
@@ -13,6 +12,7 @@ export default function LoginWithEmail() {
   const [password, setPassword] = useState('');
   const [appKey, setAppKey] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAppKey, setShowAppKey] = useState(false); // Yeni eklenen durum
 
   const handleLogin = async () => {
     try {
@@ -29,12 +29,17 @@ export default function LoginWithEmail() {
         headers: {'Content-Type': 'multipart/form-data'},
       });
 
-      //if (response.data && response.data.content.appKey) {
       if (response?.data?.content?.appKey) {
-        //setAppKey(response.data.content.appKey);
         const userAppKey = response.data.content.appKey;
+
         dispatch({type: 'SET_APP_KEY', payload: userAppKey});
-        navigation.navigate('FormSubmissions');
+
+        setAppKey(userAppKey);
+        setShowAppKey(true);
+        setTimeout(() => {
+          setShowAppKey(false);
+          navigation.navigate('Forms');
+        }, 2000); // 2 saniye bekleyin ve sonra yönlendirme yapın
       } else {
         setErrorMessage(
           'Böyle bir kullanıcı yok veya kullanıcı adı/şifre yanlış',
@@ -42,7 +47,6 @@ export default function LoginWithEmail() {
       }
     } catch (error) {
       console.error('Hata:', error);
-      // Ağ hatası veya başka bir hata oluştuysa uygun mesajı ayarlayın
       setErrorMessage('Bir hata oluştu. Lütfen tekrar deneyin.');
     }
   };
@@ -68,7 +72,7 @@ export default function LoginWithEmail() {
           secureTextEntry={true}
         />
         <Button title="Giriş Yap" onPress={handleLogin} />
-        {appKey && <Text style={{marginTop: 10}}>appKey: {appKey}</Text>}
+        {showAppKey && <Text style={{marginTop: 10}}>appKey: {appKey}</Text>}
         {errorMessage && (
           <Text style={{color: 'red', marginTop: 10}}>{errorMessage}</Text>
         )}
