@@ -11,6 +11,7 @@ import Submissions from './src/screens/Submissions';
 import Forms from './src/screens/Forms';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
+import BackButton from './src/components/BackButton';
 
 const Stack = createStackNavigator();
 
@@ -24,8 +25,8 @@ export default function App() {
             headerShown: false,
           }}>
           <Stack.Screen name="StartScreen" component={StartScreen} />
-          <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="LoginWithEmail" component={LoginWithEmail} />
+          <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Forms" component={Forms} />
           <Stack.Screen name="DataChart" component={DataChart} />

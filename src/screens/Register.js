@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, Button} from 'react-native';
-import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import {blue} from 'react-native-reanimated';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function Register({navigation}) {
   const [name, setName] = useState({value: '', error: ''});
@@ -22,7 +22,7 @@ export default function Register({navigation}) {
   };
 
   return (
-    <Background>
+    <SafeAreaView>
       <BackButton goBack={navigation.goBack} />
       <Logo />
       <Header>Ücretsiz hesap oluştur</Header>
@@ -60,7 +60,7 @@ export default function Register({navigation}) {
         mode="contained"
         onPress={onSignUpPressed}
         style={{marginTop: 24}}></Button>
-    </Background>
+    </SafeAreaView>
   );
 }
 

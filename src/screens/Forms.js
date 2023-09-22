@@ -37,7 +37,7 @@ const Forms = ({}) => {
         renderItem={({item}) => (
           <TouchableOpacity onPress={() => handleFormIdClick(item)}>
             <View>
-              <Text>"form_id": {item.id}</Text>
+              <Text>{item.title}</Text>
               <View style={{marginBottom: 10}}></View>
             </View>
           </TouchableOpacity>

@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Circular',
     fontWeight: '400',
-    wordWrap: 'break-word',
+    alignSelf: 'center',
   },
 });

@@ -1,13 +1,13 @@
 import React from 'react';
 import {Button} from 'react-native';
-import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import Paragraph from '../components/Paragraph';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function HomePage({navigation}) {
   return (
-    <Background>
+    <SafeAreaView>
       <Logo />
       <Header>Let’s start</Header>
       <Paragraph>
@@ -32,6 +32,6 @@ export default function HomePage({navigation}) {
             routes: [{name: 'DataChart'}],
           })
         }></Button>
-    </Background>
+    </SafeAreaView>
   );
 }

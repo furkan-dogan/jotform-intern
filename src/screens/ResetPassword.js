@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import {Button} from 'react-native';
-import Background from '../components/Background';
 import BackButton from '../components/BackButton';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function ResetPassword({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
 
   return (
-    <Background>
+    <SafeAreaView>
       <BackButton goBack={navigation.goBack} />
       <Logo />
       <Header>Restore Password</Header>
@@ -32,6 +32,6 @@ export default function ResetPassword({navigation}) {
         mode="contained"
         onPress={sendResetPasswordEmail}
         style={{marginTop: 16}}></Button>
-    </Background>
+    </SafeAreaView>
   );
 }

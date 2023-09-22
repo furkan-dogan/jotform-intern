@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-paper';
 import {Text} from 'react-native-paper';
-import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function StartScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
@@ -24,35 +22,72 @@ export default function StartScreen({navigation}) {
   };
 
   return (
-    <Background>
+    <SafeAreaView
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        background: 'white',
+        borderRadius: 40,
+        overflow: 'hidden',
+      }}>
       <Logo />
-      <Header>Veri toplamaya başlamak için kaydolun.</Header>
-      <View style={{padding: 16}}>
-        <Button mode="outlined" onPress={() => navigation.navigate('')}>
-          <Icon name="google" size={20} color="black" />
-          Google ile kaydol
+      <Header>Sign up to start collecting data.</Header>
+      <View style={styles.signupView}>
+        <Button
+          style={styles.signupGoogleButton}
+          mode="outlined"
+          onPress={() => navigation.navigate('')}>
+          <Text style={styles.signupText}>Sign up with Google</Text>
         </Button>
       </View>
 
-      <View style={{padding: 16}}>
-        <Button mode="outlined" onPress={() => navigation.navigate('')}>
-          <Icon name="google" size={20} color="black" />
-          Facebook ile kaydol
+      <View style={styles.signupView}>
+        <Button
+          style={styles.signupFacebookButton}
+          mode="outlined"
+          onPress={() => navigation.navigate('DataChart')}>
+          <Text style={styles.signupText}>Sign up with Facebook</Text>
         </Button>
       </View>
 
-      <Text>veya</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 30,
+          marginVertical: 25,
+        }}>
+        <View style={{flex: 1, height: 1, backgroundColor: '#C8CEED'}} />
+        <Text
+          style={{
+            color: '#C8CEED',
+            fontSize: 12,
+            fontFamily: 'Circular',
+            fontWeight: '400',
+            letterSpacing: 0.4,
+          }}>
+          OR
+        </Text>
+        <View style={{flex: 1, height: 1, backgroundColor: '#C8CEED'}} />
+      </View>
 
-      <Button mode="contained" onPress={() => navigation.navigate('Register')}>
-        E-posta ile kaydol
-      </Button>
+      <View style={styles.signupView}>
+        <Button
+          style={styles.signupEmailButton}
+          mode="contained"
+          onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.signupText}>Sign up with Email</Text>
+        </Button>
+      </View>
+
       <View style={styles.row}>
-        <Text>Hesabınız var mı?</Text>
+        <Text>Already have an account</Text>
         <TouchableOpacity onPress={() => navigation.replace('LoginWithEmail')}>
-          <Text style={styles.link}> Giriş yapın</Text>
+          <Text style={styles.link}> Sign In</Text>
         </TouchableOpacity>
       </View>
-    </Background>
+    </SafeAreaView>
   );
 }
 
@@ -64,17 +99,63 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginTop: 4,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    display: 'inline-flex',
   },
   forgot: {
     fontSize: 13,
     color: '#414757',
   },
   link: {
-    fontWeight: 'bold',
-    color: '#560CCE',
+    color: '#4DBEFC',
+    fontSize: 14,
+    fontFamily: 'Circular',
+    fontWeight: '400',
+    letterSpacing: 0.4,
   },
-  viewButtons: {
-    marginTop: 90,
+  signupFacebookButton: {
+    addingLeft: 16,
+    paddingRight: 16,
+    backgroundColor: '#0066C3',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'inline-flex',
+  },
+  signupGoogleButton: {
+    addingLeft: 16,
+    paddingRight: 16,
+    backgroundColor: '#0075E3',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'inline-flex',
+  },
+  signupEmailButton: {
+    addingLeft: 16,
+    paddingRight: 16,
+    backgroundColor: '#FF6100',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'inline-flex',
+  },
+  signupText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Circular',
+    fontWeight: '500',
+    lineHeight: 16,
+  },
+  signupView: {
+    marginTop: 10,
+    paddingLeft: 12,
+    paddingRight: 12,
+    justifyContent: 'center',
+    display: 'flex',
   },
 });
