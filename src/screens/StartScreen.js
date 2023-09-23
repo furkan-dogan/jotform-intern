@@ -1,26 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, StyleSheet, View, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 import Logo from '../components/Logo';
-import Header from '../components/Header';
 
 export default function StartScreen({navigation}) {
-  const [email, setEmail] = useState({value: '', error: ''});
-  const [password, setPassword] = useState({value: '', error: ''});
-
-  const onLoginPressed = () => {
-    if (emailError || passwordError) {
-      setEmail({...email, error: emailError});
-      setPassword({...password, error: passwordError});
-      return;
-    }
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'HomePage'}],
-    });
-  };
-
   return (
     <SafeAreaView
       style={{
@@ -32,7 +16,7 @@ export default function StartScreen({navigation}) {
         overflow: 'hidden',
       }}>
       <Logo />
-      <Header>Sign up to start collecting data.</Header>
+      <Text style={styles.header}>Sign up to start collecting data.</Text>
       <View style={styles.signupView}>
         <Button
           style={styles.signupGoogleButton}
@@ -92,6 +76,13 @@ export default function StartScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  header: {
+    color: 'black',
+    fontSize: 16,
+    fontFamily: 'Circular',
+    fontWeight: '400',
+    alignSelf: 'center',
+  },
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',

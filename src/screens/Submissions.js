@@ -3,8 +3,11 @@ import {View, Text} from 'react-native';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import Dropdown from '../components/Dropdown';
-import DataChart from './DataChart';
+import PieDataChart from '../charts/PieDataChart';
+import DonutDataChart from '../charts/DonutDataChart';
+import BarDataChart from '../charts/BarDataChart';
 import {ScrollView} from 'react-native-gesture-handler';
+import HorizontalBarDataChart from '../charts/HorizontalBarDataChart';
 
 const Submissions = ({route}) => {
   const {selectedForm} = route.params ?? {};
@@ -14,7 +17,6 @@ const Submissions = ({route}) => {
   const [selectedQuestionQid, setSelectedQuestionQid] = useState('');
   const [questions, setQuestions] = useState([]);
   const [submissionData, setSubmissionData] = useState([]);
-  const colors = ['#177AD5', '#FF6100', '#FFD700', '#32CD32', '#8A2BE2'];
 
   const calculateAnswerCounts = () => {
     const answerCounts = {};
@@ -52,13 +54,12 @@ const Submissions = ({route}) => {
           const {content} = response.data;
           const submissionData = [];
 
-          content.forEach((submission, index) => {
+          content.forEach(submission => {
             Object.entries(submission.answers).forEach(([key, answer]) => {
               if (selectedQuestionQid === key) {
                 submissionData.push({
                   createdAt: submission.created_at,
                   answer: answer.answer,
-                  color: colors[index % colors.length],
                 });
               }
             });
@@ -88,6 +89,7 @@ const Submissions = ({route}) => {
               'control_radio',
             ].includes(question.type),
           )
+          // Seçilen selectedOption'u questions dizisinden bulup, qid ve text'i günceller
           .map(question => question.text)}
         selectedOption={selectedOption}
         onSelect={selectedText => {
@@ -105,20 +107,24 @@ const Submissions = ({route}) => {
 
       {submissionData.map((data, index) => (
         <View key={index}>
+          <Text> </Text>
+
           <Text>Submission {index + 1}</Text>
           <Text>created_at: {data.createdAt}</Text>
           <Text>Form Yanıtlama Tarihi</Text>
           <Text>answer: {JSON.stringify(data.answer)}</Text>
-          <Text> </Text>
         </View>
       ))}
 
-      <DataChart submissionData={submissionData} />
+      <PieDataChart submissionData={submissionData} />
+      <DonutDataChart submissionData={submissionData} />
+      <BarDataChart submissionData={submissionData} />
+      <HorizontalBarDataChart submissionData={submissionData} />
 
       {calculateAnswerCounts().map(([answer, count], index) => (
-        <View key={index}>
+        <View key={index} style={{marginTop: 25}}>
           <Text>Cevap: {answer}</Text>
-          <Text>Veren Kişi Sayısı: {count}</Text>
+          <Text>Bu cevabı veren kişi sayısı: {count}</Text>
         </View>
       ))}
     </ScrollView>

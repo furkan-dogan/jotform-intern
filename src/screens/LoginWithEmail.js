@@ -48,7 +48,7 @@ export default function LoginWithEmail() {
         setTimeout(() => {
           setShowAppKey(false);
           navigation.navigate('Forms');
-        }, 2000); // 2 saniye bekleyin ve sonra yönlendirme yapın
+        });
       } else {
         setErrorMessage(
           'Böyle bir kullanıcı yok veya kullanıcı adı/şifre yanlış',
@@ -195,7 +195,6 @@ export default function LoginWithEmail() {
         </Button>
       </View>
 
-      {showAppKey && <Text style={{marginTop: 10}}>appKey: {appKey}</Text>}
       {errorMessage && (
         <Text style={{color: 'red', marginTop: 10}}>{errorMessage}</Text>
       )}

@@ -2,8 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {PieChart} from 'react-native-gifted-charts';
 
-const DataChart = ({submissionData}) => {
-  const colors = ['#177AD5', '#FF6100', '#FFD700', '#32CD32', '#8A2BE2'];
+const DonutDataChart = ({submissionData}) => {
+  const colors = ['#0066C3', '#0075E3', '#4DBEFC', '#EDF8FF', '#FC0303'];
 
   const calculateAnswerCounts = () => {
     const answerCounts = {};
@@ -35,10 +35,11 @@ const DataChart = ({submissionData}) => {
   return (
     <View>
       <PieChart
+        donut
         showText
         textColor="black"
         radius={150}
-        textSize={20}
+        textSize={16}
         showTextBackground
         textBackgroundRadius={26}
         data={pieData}
@@ -47,4 +48,4 @@ const DataChart = ({submissionData}) => {
   );
 };
 
-export default DataChart;
+export default DonutDataChart;
