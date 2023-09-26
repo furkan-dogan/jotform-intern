@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const Header = ({onSearch}) => {
+const HeaderForms = ({onSearch}) => {
   const [isTextInputVisible, setTextInputVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
 
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default HeaderForms;

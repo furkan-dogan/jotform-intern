@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import BackButton from '../components/BackButton';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginWithEmail() {
   const dispatch = useDispatch();
@@ -40,6 +41,8 @@ export default function LoginWithEmail() {
 
       if (response?.data?.content?.appKey) {
         const userAppKey = response.data.content.appKey;
+
+        await AsyncStorage.setItem('appKey', userAppKey);
 
         dispatch({type: 'SET_APP_KEY', payload: userAppKey});
 
@@ -69,7 +72,7 @@ export default function LoginWithEmail() {
           gap: 123,
           display: 'inline-flex',
         }}>
-        <BackButton goBack={navigation.goBack} />
+        <BackButton goBack={() => navigation.goBack()} />
         <Text
           style={{
             alignSelf: 'center',
@@ -227,7 +230,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Circular',
     fontWeight: '500',
     lineHeight: 16,
-    wordWrap: 'break-word',
   },
   frame: {
     borderWidth: 2,
@@ -249,7 +251,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#E3E5F5',
     borderRadius: 4,
-    border: '1px #E3E5F5 solid',
     width: 360,
     height: '50%',
     marginLeft: 16,

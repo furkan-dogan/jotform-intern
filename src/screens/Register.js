@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Button} from 'react-native';
 import Logo from '../components/Logo';
-import Header from '../components/Header';
+import HeaderForms from '../components/HeaderForms';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import {blue} from 'react-native-reanimated';
@@ -23,9 +23,8 @@ export default function Register({navigation}) {
 
   return (
     <SafeAreaView>
-      <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Ücretsiz hesap oluştur</Header>
+      <HeaderForms>Ücretsiz hesap oluştur</HeaderForms>
       <TextInput
         label="İsim Soyisim"
         returnKeyType="next"

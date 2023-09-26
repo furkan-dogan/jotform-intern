@@ -1,10 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity, StyleSheet, View, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 import Logo from '../components/Logo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
 
 export default function StartScreen({navigation}) {
+  const dispatch = useDispatch();
+  const checkAuth = async () => {
+    try {
+      const value = await AsyncStorage.getItem('appKey');
+      if (value !== null) {
+        dispatch({type: 'SET_APP_KEY', payload: value});
+        navigation.navigate('Forms');
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   return (
     <SafeAreaView
       style={{

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import Dropdown from '../components/Dropdown';
@@ -8,16 +8,43 @@ import DonutDataChart from '../charts/DonutDataChart';
 import BarDataChart from '../charts/BarDataChart';
 import {ScrollView} from 'react-native-gesture-handler';
 import HorizontalBarDataChart from '../charts/HorizontalBarDataChart';
+import TextDataChart from '../charts/TextDataChart';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const Submissions = ({route}) => {
-  const {selectedForm} = route.params ?? {};
+const Submissions = ({selectedForm}) => {
   const appKey = useSelector(state => state.appKey);
-  const API_URL = `https://api.jotform.com/form/${selectedForm.id}/questions?apiKey=${appKey}`;
-  const [selectedOption, setSelectedOption] = useState('Select an option');
+  const API_URL = `https://api.jotform.com/form/${selectedForm?.id}/questions?apiKey=${appKey}`;
+  const [selectedOption, setSelectedOption] = useState('Select a question');
   const [selectedQuestionQid, setSelectedQuestionQid] = useState('');
+  const [selectedChartData, setSelectedChartData] = useState(null); // State for selected chart type
   const [questions, setQuestions] = useState([]);
   const [submissionData, setSubmissionData] = useState([]);
 
+  // DATE PICKER PART
+  const [showDatePicker, setShowDatePicker] = useState(false); // State to control date picker visibility
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [displayText, setDisplayText] = useState('All time');
+  const handleDateChange = (event, selected) => {
+    setShowDatePicker(false);
+
+    if (selected) {
+      const formattedDate = selected.toLocaleDateString('en-US');
+      setDisplayText(formattedDate);
+      setSelectedDate(selected);
+    } else {
+      setDisplayText('All Time');
+      setSelectedDate(null);
+    }
+  };
+
+  console.log(selectedForm?.id);
+
+  // CALCULATE ANSWERS
+  const validResponsesCount = totalSubmissions - undefinedCount;
+  const totalSubmissions = submissionData.length;
+  const undefinedCount = submissionData.filter(
+    data => data.answer === undefined,
+  ).length;
   const calculateAnswerCounts = () => {
     const answerCounts = {};
 
@@ -74,59 +101,91 @@ const Submissions = ({route}) => {
   }, [selectedQuestionQid]);
 
   return (
-    <ScrollView style={{marginTop: 40}}>
-      <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 10}}>
-        Form Detayları
-      </Text>
-      <Text>Selected Option: {selectedOption}</Text>
-      <Dropdown
-        options={questions
-          .filter(question =>
-            [
-              'control_rating',
-              'control_scale',
-              'control_dropdown',
-              'control_radio',
-            ].includes(question.type),
-          )
-          // Seçilen selectedOption'u questions dizisinden bulup, qid ve text'i günceller
-          .map(question => question.text)}
-        selectedOption={selectedOption}
-        onSelect={selectedText => {
-          const selectedQuestion = questions.find(
-            question => question.text === selectedText,
-          );
-          setSelectedQuestionQid(selectedQuestion.qid);
-          setSelectedOption(selectedText);
-        }}
-      />
+    <ScrollView style={{marginTop: 50}}>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+          <Text style={{fontSize: 16, color: 'blue', marginRight: 10}}>
+            {displayText}
+          </Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={selectedDate || new Date()}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+        <Dropdown
+          options={questions
+            .filter(question =>
+              [
+                'control_rating',
+                'control_scale',
+                'control_dropdown',
+                'control_radio',
+              ].includes(question.type),
+            )
+            .map(question => question.text)}
+          selectedOption={selectedOption}
+          onSelect={selectedText => {
+            const selectedQuestion = questions.find(
+              question => question.text === selectedText,
+            );
+            setSelectedQuestionQid(selectedQuestion.qid);
+            setSelectedOption(selectedText);
+          }}
+        />
+      </View>
 
-      <Text>"form_id": {selectedForm.id}</Text>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+        <Text style={{marginTop: 25}}>
+          {validResponsesCount} out of {totalSubmissions} people answered
+        </Text>
+        {/* Dropdown to select the chart type */}
+        <Dropdown
+          options={[
+            'Pie Chart',
+            'Donut Chart',
+            'Bar Chart',
+            'Horizontal Bar Chart',
+            'Text Chart',
+          ]}
+          selectedOption={
+            selectedChartData
+              ? selectedChartData.charAt(0).toUpperCase() +
+                selectedChartData.slice(1) +
+                ' Chart'
+              : 'Select a chart'
+          }
+          onSelect={selectedChart => {
+            if (selectedChart.toLowerCase() === 'text') {
+              setSelectedChartData('text');
+            } else {
+              setSelectedChartData(selectedChart.toLowerCase().split(' ')[0]);
+            }
+          }}
+        />
+      </View>
 
-      <Text>"created_at": {selectedForm.created_at}</Text>
-
-      {submissionData.map((data, index) => (
-        <View key={index}>
-          <Text> </Text>
-
-          <Text>Submission {index + 1}</Text>
-          <Text>created_at: {data.createdAt}</Text>
-          <Text>Form Yanıtlama Tarihi</Text>
-          <Text>answer: {JSON.stringify(data.answer)}</Text>
-        </View>
-      ))}
-
-      <PieDataChart submissionData={submissionData} />
-      <DonutDataChart submissionData={submissionData} />
-      <BarDataChart submissionData={submissionData} />
-      <HorizontalBarDataChart submissionData={submissionData} />
-
-      {calculateAnswerCounts().map(([answer, count], index) => (
-        <View key={index} style={{marginTop: 25}}>
-          <Text>Cevap: {answer}</Text>
-          <Text>Bu cevabı veren kişi sayısı: {count}</Text>
-        </View>
-      ))}
+      {selectedChartData === 'pie' && (
+        <PieDataChart submissionData={submissionData} />
+      )}
+      {selectedChartData === 'donut' && (
+        <DonutDataChart submissionData={submissionData} />
+      )}
+      {selectedChartData === 'bar' && (
+        <BarDataChart submissionData={submissionData} />
+      )}
+      {selectedChartData === 'horizontalBar' && (
+        <HorizontalBarDataChart submissionData={submissionData} />
+      )}
+      {selectedChartData === 'text' &&
+        calculateAnswerCounts().map(([answer, count], index) => (
+          <TextDataChart key={index} answer={answer} count={count} />
+        ))}
     </ScrollView>
   );
 };

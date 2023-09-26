@@ -6,20 +6,20 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  Button,
+  Linking,
 } from 'react-native';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../components/Header';
 import Modal from 'react-native-modal';
+import HeaderForms from '../components/HeaderForms';
+import WebView from 'react-native-webview';
 
 const API_URL = 'https://api.jotform.com/user/forms?apiKey=';
 
 const Forms = ({}) => {
   const [forms, setForms] = useState([]);
   const [filteredForms, setFilteredForms] = useState([]);
-  const [selectedFormId, setSelectedFormId] = useState(null);
   const [selectedFormTitle, setSelectedFormTitle] = useState(''); // Form başlığını saklayacak state
   const appKey = useSelector(state => state.appKey);
   const navigation = useNavigation();
@@ -38,15 +38,6 @@ const Forms = ({}) => {
       });
   }, [appKey]);
 
-  const handleFormIdClick = selectedForm => {
-    // Seçilen veriyi submissions.js sayfasına yönlendirdik
-    navigation.navigate('Submissions', {selectedForm});
-    setTimeout(() => {
-      setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
-    }, 100);
-    openModal();
-  };
-
   const handleFormTitleClick = selectedForm => {
     setSelectedFormTitle(selectedForm.title); // Tıklanan form başlığını sakla
     openModal();
@@ -64,9 +55,15 @@ const Forms = ({}) => {
     setModalVisible(true);
   };
 
+  const openWebView = () => {
+    const url = 'https://www.jotform.com/form/232654601878059';
+
+    Linking.openURL(url).catch(err => console.error('Linking error: ', err));
+  };
+
   return (
     <View>
-      <Header onSearch={handleSearch} />
+      <HeaderForms onSearch={handleSearch} />
       <FlatList
         data={filteredForms}
         keyExtractor={item => item.id}
@@ -110,7 +107,12 @@ const Forms = ({}) => {
                     source={require('../assets/product-form-builder-color-border.png')}
                   />
                   <Text style={styles.modalTitle}>{selectedFormTitle}</Text>
-                  <Image source={require('../assets/xmark.png')} />
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(false)} // Modal'ı kapatmak için onPress olayını ekleyin
+                  >
+                    <Image source={require('../assets/xmark.png')} />
+                  </TouchableOpacity>
+
                   {/* Seçilen form başlığı */}
                 </View>
                 <View style={styles.modalBottom}>
@@ -118,7 +120,11 @@ const Forms = ({}) => {
                   <TouchableOpacity
                     style={styles.modalButton}
                     onPress={() => {
-                      handleFormIdClick(item);
+                      navigation.navigate('Results', {selectedForm: item});
+                      setTimeout(() => {
+                        setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
+                      }, 100);
+                      openModal();
                     }}>
                     <Image
                       source={require('../assets/product-form-builder-magnifying-glass-filled.png')}
@@ -128,8 +134,13 @@ const Forms = ({}) => {
                   <TouchableOpacity
                     style={styles.modalButton}
                     onPress={() => {
-                      // Handle "Fill Out" button click
-                      // navigation.navigate('FillOut'); // Burada Fill Out sayfasına yönlendirme yapabilirsiniz.
+                      //navigation.navigate('Summary');
+                      setTimeout(() => {
+                        setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
+                      }, 100);
+                      openModal();
+                      // Handle "Edit" button click
+                      // navigation.navigate('Edit'); // Burada Edit sayfasına yönlendirme yapabilirsiniz.
                     }}>
                     <Image
                       source={require('../assets/product-form-builder-filled.png')}
@@ -138,14 +149,11 @@ const Forms = ({}) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Edit" button click
-                      // navigation.navigate('Edit'); // Burada Edit sayfasına yönlendirme yapabilirsiniz.
-                    }}>
+                    onPress={openWebView}>
                     <Image
                       source={require('../assets/pencil-line-filled.png')}
                     />
-                    <Text style={styles.modalButtonText}>Edit</Text>
+                    <Text style={styles.modalButtonText}>Edit(Summary)</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.modalButton}
@@ -193,10 +201,6 @@ const Forms = ({}) => {
                     <Text style={styles.modalButtonText}>Delete</Text>
                   </TouchableOpacity>
                 </View>
-                <Button
-                  title="Close Modal"
-                  onPress={() => setModalVisible(false)}
-                />
               </View>
             </Modal>
           </TouchableOpacity>
@@ -222,7 +226,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Circular',
     fontWeight: '400',
     lineHeight: 15.51,
-    wordWrap: 'break-word',
   },
   modalContent: {
     backgroundColor: '#030D50',
