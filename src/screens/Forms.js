@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import HeaderForms from '../components/HeaderForms';
-import WebView from 'react-native-webview';
+import Wrapper from '../components/Wrapper';
 
 const API_URL = 'https://api.jotform.com/user/forms?apiKey=';
 
@@ -21,6 +21,8 @@ const Forms = ({}) => {
   const [forms, setForms] = useState([]);
   const [filteredForms, setFilteredForms] = useState([]);
   const [selectedFormTitle, setSelectedFormTitle] = useState(''); // Form başlığını saklayacak state
+  const [selectedForm, setSelectedForm] = useState({}); // Form başlığını saklayacak state
+
   const appKey = useSelector(state => state.appKey);
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -39,6 +41,7 @@ const Forms = ({}) => {
   }, [appKey]);
 
   const handleFormTitleClick = selectedForm => {
+    setSelectedForm(selectedForm);
     setSelectedFormTitle(selectedForm.title); // Tıklanan form başlığını sakla
     openModal();
   };
@@ -63,149 +66,174 @@ const Forms = ({}) => {
 
   return (
     <View>
-      <HeaderForms onSearch={handleSearch} />
-      <FlatList
-        data={filteredForms}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            onPress={() => {
-              handleFormTitleClick(item);
-            }}>
+      <Modal
+        isVisible={isModalVisible}
+        backdropColor="#030D50"
+        position="bottom"
+        style={{justifyContent: 'flex-end', margin: 0}}>
+        <View style={styles.modalContent}>
+          <View style={styles.modalTop}>
             <View
               style={{
                 flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}>
-              <View style={{left: 15}}>
-                <Image
-                  source={require('../assets/product-form-builder-color-border.png')}
-                />
-              </View>
-
-              <View>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleText}>{item.title}</Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.subtitleText}>
-                    {item.count} Submissions.{' '}
-                  </Text>
-                  <Text style={styles.subtitleText}>{item.created_at}</Text>
-                </View>
-              </View>
-
-              <View style={{position: 'absolute', right: 15}}>
-                <Image source={require('../assets/star-empty.png')} />
+              <Image
+                source={require('../assets/product-form-builder-color-border.png')}
+              />
+              <Text style={styles.modalTitle}>{selectedFormTitle}</Text>
+              <View style={{flex: 1, alignItems: 'flex-end'}}>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <Image source={require('../assets/xmark.png')} />
+                </TouchableOpacity>
               </View>
             </View>
+            {/* Seçilen form başlığı */}
+          </View>
 
-            {/* Modal */}
-            <Modal isVisible={isModalVisible} backdropColor="#030D50">
-              <View style={styles.modalContent}>
-                <View style={styles.modalTop}>
+          <View>
+            {/* İşte alt bölüm */}
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                navigation.navigate('Results', {selectedForm: selectedForm});
+                setTimeout(() => {
+                  setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
+                }, 100);
+                openModal();
+              }}>
+              <Image
+                source={require('../assets/product-form-builder-magnifying-glass-filled.png')}
+              />
+              <Text style={styles.modalButtonText}>Results</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                navigation.navigate('OnboardingPage');
+                setTimeout(() => {
+                  setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
+                }, 100);
+                openModal();
+              }}>
+              <Image
+                source={require('../assets/product-form-builder-filled.png')}
+              />
+              <Text style={styles.modalButtonText}>Fill Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                navigation.navigate('CreateSummaryReport');
+                setTimeout(() => {
+                  setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
+                }, 100);
+                openModal();
+              }}>
+              <Image source={require('../assets/pencil-line-filled.png')} />
+              <Text style={styles.modalButtonText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                // Handle "Assign" button click
+                // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
+              }}>
+              <Image source={require('../assets/users-filled.png')} />
+              <Text style={styles.modalButtonText}>Assign</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                // Handle "Assign" button click
+                // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
+              }}>
+              <Image source={require('../assets/desktop-filled.png')} />
+              <Text style={styles.modalButtonText}>Kiosk Mode</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                // Handle "Assign" button click
+                // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
+              }}>
+              <Image source={require('../assets/arrow-flip-right.png')} />
+              <Text style={styles.modalButtonText}>Publish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                // Handle "Assign" button click
+                // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
+              }}>
+              <Image source={require('../assets/pause-filled.png')} />
+              <Text style={styles.modalButtonText}>Disable</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                // Handle "Assign" button click
+                // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
+              }}>
+              <Image source={require('../assets/trash-filled.png')} />
+              <Text style={styles.modalButtonText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <HeaderForms onSearch={handleSearch} />
+      <Wrapper>
+        <FlatList
+          data={filteredForms}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={{}}
+              onPress={() => {
+                handleFormTitleClick(item);
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingBottom: 30,
+                }}>
+                <View>
                   <Image
+                    style={{width: 30}}
                     source={require('../assets/product-form-builder-color-border.png')}
                   />
-                  <Text style={styles.modalTitle}>{selectedFormTitle}</Text>
-                  <TouchableOpacity
-                    onPress={() => setModalVisible(false)} // Modal'ı kapatmak için onPress olayını ekleyin
-                  >
-                    <Image source={require('../assets/xmark.png')} />
-                  </TouchableOpacity>
-
-                  {/* Seçilen form başlığı */}
                 </View>
-                <View style={styles.modalBottom}>
-                  {/* İşte alt bölüm */}
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      navigation.navigate('Results', {selectedForm: item});
-                      setTimeout(() => {
-                        setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
-                      }, 100);
-                      openModal();
-                    }}>
-                    <Image
-                      source={require('../assets/product-form-builder-magnifying-glass-filled.png')}
-                    />
-                    <Text style={styles.modalButtonText}>Results</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      //navigation.navigate('Summary');
-                      setTimeout(() => {
-                        setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
-                      }, 100);
-                      openModal();
-                      // Handle "Edit" button click
-                      // navigation.navigate('Edit'); // Burada Edit sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image
-                      source={require('../assets/product-form-builder-filled.png')}
-                    />
-                    <Text style={styles.modalButtonText}>Fill Out</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={openWebView}>
-                    <Image
-                      source={require('../assets/pencil-line-filled.png')}
-                    />
-                    <Text style={styles.modalButtonText}>Edit(Summary)</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Assign" button click
-                      // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image source={require('../assets/users-filled.png')} />
-                    <Text style={styles.modalButtonText}>Assign</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Assign" button click
-                      // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image source={require('../assets/desktop-filled.png')} />
-                    <Text style={styles.modalButtonText}>Kiosk Mode</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Assign" button click
-                      // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image source={require('../assets/arrow-flip-right.png')} />
-                    <Text style={styles.modalButtonText}>Publish</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Assign" button click
-                      // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image source={require('../assets/pause-filled.png')} />
-                    <Text style={styles.modalButtonText}>Disable</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      // Handle "Assign" button click
-                      // navigation.navigate('Assign'); // Burada Assign sayfasına yönlendirme yapabilirsiniz.
-                    }}>
-                    <Image source={require('../assets/trash-filled.png')} />
-                    <Text style={styles.modalButtonText}>Delete</Text>
-                  </TouchableOpacity>
+
+                <View style={{paddingLeft: 13, paddingRight: 13}}>
+                  <View>
+                    <Text style={styles.titleText}>{item.title}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.subtitleText}>
+                      {item.count} Submissions
+                    </Text>
+                    <Text style={styles.subtitleText}>
+                      Last submission: {item.updated_at}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={{paddingLeft: 10}}>
+                  <Image
+                    style={{width: 28}}
+                    source={require('../assets/star-empty.png')}
+                  />
                 </View>
               </View>
-            </Modal>
-          </TouchableOpacity>
-        )}
-      />
+
+              {/* Modal */}
+            </TouchableOpacity>
+          )}
+        />
+      </Wrapper>
     </View>
   );
 };
@@ -219,8 +247,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Circular',
     fontWeight: '700',
     lineHeight: 19.94,
+    textAlign: 'left',
   },
   subtitleText: {
+    textAlign: 'left',
     color: '#6C73AB',
     fontSize: 14,
     fontFamily: 'Circular',
@@ -236,28 +266,27 @@ const styles = StyleSheet.create({
   modalTop: {
     marginBottom: 20,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   modalTitle: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Circular',
-    fontWeight: '400',
+    fontWeight: 'bold',
     lineHeight: 17.73,
+    marginLeft: 6,
   },
-  modalBottom: {
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingTop: 10,
-  },
+
   modalButton: {
     color: 'white',
-    fontSize: 14,
-    fontFamily: 'Poppins',
-    fontWeight: '300',
-    lineHeight: 15.51,
+    height: 32,
+    background: '#F3F3F3',
     flexDirection: 'row',
   },
   modalButtonText: {
+    marginLeft: 5,
+    fontSize: 16,
     color: 'white',
     textAlign: 'center',
   },

@@ -198,6 +198,44 @@ export default function LoginWithEmail() {
         </Button>
       </View>
 
+      <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 22}}>
+        <View>
+          <Text>Don't you have an account?</Text>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Text
+              style={{
+                color: '#4DBEFC',
+                fontSize: 14,
+                fontWeight: 'bold',
+                borderRadius: 4,
+              }}>
+              {' '}
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View
+        style={{
+          marginTop: 11,
+          alignSelf: 'center',
+          borderWidth: 1,
+          borderColor: '#4DBEFC',
+          paddingLeft: 16,
+          paddingRight: 16,
+          padding: 13,
+          borderRadius: 7,
+        }}>
+        <TouchableOpacity>
+          <Text style={{color: '#4DBEFC', fontWeight: 'bold', fontSize: 15}}>
+            Switch to Jotform Enterprise
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       {errorMessage && (
         <Text style={{color: 'red', marginTop: 10}}>{errorMessage}</Text>
       )}
@@ -207,14 +245,13 @@ export default function LoginWithEmail() {
 
 const styles = StyleSheet.create({
   signInView: {
-    marginTop: 10,
+    marginTop: 20,
     paddingLeft: 12,
     paddingRight: 12,
-    justifyContent: 'center',
-    display: 'flex',
   },
   signInButton: {
     addingLeft: 16,
+    padding: 5,
     paddingRight: 16,
     backgroundColor: '#64B220',
     borderRadius: 4,
@@ -224,12 +261,8 @@ const styles = StyleSheet.create({
   },
 
   signInText: {
-    textAlign: 'center',
     color: 'white',
     fontSize: 18,
-    fontFamily: 'Circular',
-    fontWeight: '500',
-    lineHeight: 16,
   },
   frame: {
     borderWidth: 2,

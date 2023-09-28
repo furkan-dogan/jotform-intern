@@ -28,14 +28,14 @@ const HorizontalBarDataChart = ({submissionData}) => {
     ([answer, count], index) => ({
       value: count,
       frontColor: colors[index % colors.length],
-      label: answer,
+      label: answer === 'undefined' ? 'No Answer' : answer,
     }),
   );
 
   return (
     <View>
       <BarChart
-        shiftX={25}
+        shiftX={30}
         horizontal
         barWidth={20}
         data={barData}

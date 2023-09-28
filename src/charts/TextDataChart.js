@@ -2,15 +2,24 @@ import React from 'react';
 import {View, Text} from 'react-native';
 
 const TextDataChart = ({answer, count}) => {
+  const data = [
+    {
+      label: 'Answer:',
+      value: answer !== 'undefined' ? answer : 'No Answer',
+    },
+    {label: 'Submissions:', value: count},
+  ];
+
   return (
-    <View style={{marginTop: 25}}>
-      <Text>
-        Cevap:{' '}
-        {answer !== 'undefined'
-          ? JSON.stringify(answer)
-          : 'Kullanıcı cevap vermedi'}
-      </Text>
-      <Text>Bu cevabı veren kişi sayısı: {count}</Text>
+    <View style={{marginLeft: 20, borderWidth: 1}}>
+      <View style={{flexDirection: 'row'}}>
+        {data.map((item, index) => (
+          <View key={index} style={{flex: 1, alignItems: 'center'}}>
+            <Text>{item.label}</Text>
+            <Text>{item.value}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 };

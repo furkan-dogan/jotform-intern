@@ -1,21 +1,27 @@
 import * as React from 'react';
-import {Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {View} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import HeaderResults from '../components/HeaderResults';
 import Submissions from './Submissions';
-
-function SummaryScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Summary</Text>
-    </View>
-  );
-}
+import Summary from './Summary';
+import Wrapper from '../components/Wrapper';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function Results({route}) {
+  const navigation = useNavigation();
+
+  function SummaryScreen() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Wrapper>
+          <Summary
+            selectedForm={route?.params?.selectedForm}
+            navigationState={navigation}></Summary>
+        </Wrapper>
+      </View>
+    );
+  }
   function SubmissionsScreen() {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -25,10 +31,9 @@ export default function Results({route}) {
   }
   return (
     <NavigationContainer independent={true}>
-      <HeaderResults />
       <Tab.Navigator
         screenOptions={{
-          labelStyle: {fontSize: 16, fontFamily: 'Circular', fontWeight: '500'},
+          labelStyle: {fontSize: 16},
           activeTintColor: '#030D50',
           inactiveTintColor: 'gray',
           style: {backgroundColor: 'black'},

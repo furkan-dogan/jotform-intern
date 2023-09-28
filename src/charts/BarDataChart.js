@@ -3,7 +3,14 @@ import {View} from 'react-native';
 import {BarChart} from 'react-native-gifted-charts';
 
 const BarDataChart = ({submissionData}) => {
-  const colors = ['#0066C3', '#0075E3', '#4DBEFC', '#EDF8FF', '#FC0303'];
+  const colors = [
+    '#C3C8CB',
+    '#4DBEFC',
+    '#419ED1',
+    '#0066C3',
+    '#0075E3',
+    '#0A1551',
+  ];
 
   const calculateAnswerCounts = () => {
     const answerCounts = {};
@@ -28,14 +35,14 @@ const BarDataChart = ({submissionData}) => {
     ([answer, count], index) => ({
       value: count,
       frontColor: colors[index % colors.length],
-      label: answer,
+      label: answer === 'undefined' ? 'No Answer' : answer,
     }),
   );
 
   return (
     <View>
       <BarChart
-        barWidth={50}
+        barWidth={23}
         textSize={30}
         textBackgroundRadius={26}
         data={barData}

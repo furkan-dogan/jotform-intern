@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  StatusBar,
   TouchableOpacity,
   Image,
   TextInput,
@@ -32,7 +31,6 @@ const HeaderForms = ({onSearch}) => {
 
   return (
     <View style={styles.header}>
-      <StatusBar />
       <TouchableOpacity onPress={handleSearchClick} style={styles.button}>
         <Image
           source={require('../assets/search_light.png')}
@@ -70,10 +68,11 @@ const handleSettingsClick = () => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#0A1551',
-    padding: 40,
+    height: 104,
+    paddingBottom: 10,
     justifyContent: 'space-between', // Sol ve sağ butonlar arasında boşluk bırakır
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   searchInput: {
     flex: 1,
@@ -84,15 +83,14 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   button: {
-    padding: 10,
+    marginLeft: 18,
+    marginRight: 18,
   },
   icon: {
-    width: 24,
-    height: 24,
     tintColor: 'white',
   },
 });

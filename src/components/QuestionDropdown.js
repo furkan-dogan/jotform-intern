@@ -6,9 +6,10 @@ import {
   Modal,
   FlatList,
   StyleSheet,
+  Image,
 } from 'react-native';
 
-const Dropdown = ({options, selectedOption, onSelect}) => {
+const QuestionDropdown = ({options, selectedOption, onSelect}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleDropdown = () => {
@@ -20,6 +21,10 @@ const Dropdown = ({options, selectedOption, onSelect}) => {
       <TouchableOpacity onPress={toggleDropdown}>
         <View style={styles.selectedOptionContainer}>
           <Text style={styles.selectedOptionText}>{selectedOption}</Text>
+          <Image
+            style={{alignContent: 'flex-end'}}
+            source={require('../assets/expand_down_light-2.png')}
+          />
         </View>
       </TouchableOpacity>
 
@@ -28,13 +33,13 @@ const Dropdown = ({options, selectedOption, onSelect}) => {
           <FlatList
             data={options}
             keyExtractor={item => item}
-            renderItem={({item}) => (
+            renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
                   onSelect(item);
                   toggleDropdown();
                 }}>
-                <Text style={styles.optionText}>{item}</Text>
+                <Text style={styles.optionText}>{`${index + 1}. ${item}`}</Text>
               </TouchableOpacity>
             )}
           />
@@ -50,16 +55,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // Centers the dropdown
   },
   selectedOptionContainer: {
-    borderWidth: 1,
     borderColor: '#ccc',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
-    backgroundColor: '#fff',
     minWidth: 150,
+    flexDirection: 'row',
   },
   selectedOptionText: {
+    color: '#030D50',
     fontSize: 14,
+    fontFamily: 'Circular',
+    fontWeight: '400',
+    lineHeight: 15.51,
   },
   modalContainer: {
     flex: 2,
@@ -80,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Dropdown;
+export default QuestionDropdown;
