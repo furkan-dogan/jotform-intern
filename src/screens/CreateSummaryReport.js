@@ -2,11 +2,46 @@ import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import React from 'react';
 import Wrapper from '../components/Wrapper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const Separator = () => <View style={styles.separator} />;
 
 const CreateSummaryReport = ({route}) => {
-  const {selectedForm} = route.params ?? {};
+  const {selectedForm, summaryScreenshotUri} = route.params ?? {};
+  const handleDownloadButtonClick = async () => {
+    try {
+      // Create a PDF document configuration
+      const pdfOptions = {
+        html: `
+    <html>
+      <head>
+        <style>
+          Jotform DataChart Downloader
+        </style>
+      </head>
+      <body>
+        <h1>Özel PDF</h1>
+        <p>...</p>
+        <img src="${summaryScreenshotUri}" />
+      </body>
+    </html>
+  `,
+        fileName: 'summary',
+        directory: 'Documents',
+      };
+
+      // Generate the PDF document
+      const pdf = await RNHTMLtoPDF.convert(pdfOptions);
+
+      // Get the path to the generated PDF
+      const pdfPath = pdf.filePath;
+
+      // Now you can do something with the PDF path, like opening or sharing it
+      console.log('PDF saved to:', pdfPath);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <Wrapper>
@@ -19,17 +54,7 @@ const CreateSummaryReport = ({route}) => {
               fontFamily: 'Circular',
               fontWeight: '400',
             }}>
-            Form adı: {selectedForm?.title}
-          </Text>
-          <Text
-            style={{
-              color: '#C8CEED',
-              fontSize: 12,
-              fontFamily: 'Circular',
-              fontWeight: '400',
-              lineHeight: 13.3,
-            }}>
-            Responses:{' '}
+            Form name: {selectedForm?.title}
           </Text>
         </View>
 
@@ -41,7 +66,7 @@ const CreateSummaryReport = ({route}) => {
             height: 100,
             width: 359,
             borderColor: '#C8CEED',
-            borderRadius: 8,
+            borderRadius: 10,
             marginTop: 33,
           }}>
           <Text
@@ -58,16 +83,38 @@ const CreateSummaryReport = ({route}) => {
               style={{
                 flexDirection: 'row',
                 alignSelf: 'center',
-                padding: 14,
+                justifyContent: 'center',
+                padding: 10,
               }}>
-              <Image
-                style={{width: 20, height: 20, alignContent: 'flex-end'}}
-                source={require('../assets/clarity_link-line.png')}
-              />
-              <Text style={styles.TextInput}>
-                https://www.jotform.com/report/23654789865234
+              <Text
+                style={{
+                  backgroundColor: '#DADEF3',
+                  borderWidth: 1,
+                  borderColor: '#F3F3FE',
+                  borderRadius: 5,
+                  width: 276,
+                  height: 32,
+                  fontSize: 10,
+                  marginLeft: 19,
+                  paddingTop: 8,
+                  paddingLeft: 9,
+                  marginBottom: 19,
+                }}>
+                https://www.jotform.com/report/232702029212039
               </Text>
-              <TouchableOpacity style={styles.ButtonInput}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#64B220',
+                  borderRadius: 4,
+                  flexDirection: 'row',
+                  height: 32,
+                  width: 80,
+                  paddingLeft: 4,
+                  paddingRight: 4,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                }}>
                 <Text style={styles.ButtonText}>Copy Link</Text>
               </TouchableOpacity>
             </View>
@@ -85,29 +132,27 @@ const CreateSummaryReport = ({route}) => {
             marginTop: 30,
           }}>
           <View>
-            <Text
-              style={{
-                color: '#030D50',
-                fontSize: 16,
-                marginTop: 16,
-                marginLeft: 19,
-                marginBottom: 10,
-              }}>
-              Invite By Email
-            </Text>
-            <Text
-              style={{
-                color: '#6C73AB',
-                fontSize: 9,
-                fontFamily: 'Circular',
-                fontWeight: '400',
-                lineHeight: 9.97,
-                marginLeft: 19,
-                marginRight: 24,
-                marginBottom: 10,
-              }}>
-              You can share form responses via e-mail addresses you specify.
-            </Text>
+            <View>
+              <Text
+                style={{
+                  color: '#030D50',
+                  fontSize: 16,
+                  marginTop: 16,
+                  marginLeft: 19,
+                  marginBottom: 10,
+                }}>
+                Invite By Email
+              </Text>
+            </View>
+            <View style={{marginLeft: 19, marginRight: 24, marginBottom: 10}}>
+              <Text
+                style={{
+                  color: '#6C73AB',
+                  fontSize: 9.5,
+                }}>
+                You can share form responses via e-mail addresses you specify.
+              </Text>
+            </View>
             <View>
               <TextInput
                 style={{
@@ -130,8 +175,28 @@ const CreateSummaryReport = ({route}) => {
                 placeholder="  Add an informational message (optional)"></TextInput>
             </View>
             <View style={{alignItems: 'flex-end'}}>
-              <TouchableOpacity style={styles.ButtonInput}>
-                <Text style={styles.ButtonText}>Send Invitation</Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#64B220',
+                  borderRadius: 4,
+                  flexDirection: 'row',
+                  height: 32,
+                  width: 130,
+                  paddingLeft: 4,
+                  paddingRight: 4,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    lineHeight: 16,
+                  }}>
+                  Send Invitation
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -162,10 +227,12 @@ const CreateSummaryReport = ({route}) => {
             <View
               style={{
                 justifyContent: 'center',
-                alignContent: 'flex-end',
-                alignItems: 'flex-end',
+                alignContent: 'flex-start',
+                marginLeft: 100,
               }}>
-              <TouchableOpacity style={styles.ButtonInput}>
+              <TouchableOpacity
+                style={styles.ButtonInput}
+                onPress={handleDownloadButtonClick}>
                 <Image
                   style={{
                     width: 20,
@@ -223,7 +290,6 @@ const styles = StyleSheet.create({
   ButtonText: {
     color: 'white',
     fontSize: 14,
-    fontFamily: 'Circular',
     fontWeight: 'bold',
     lineHeight: 16,
   },

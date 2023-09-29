@@ -52,7 +52,7 @@ const SummaryItem = ({question, selectedForm}) => {
       .catch(error => {
         console.error('API isteği sırasında hata oluştu:', error);
       });
-  }, []);
+  }, [question]);
 
   return (
     <View>

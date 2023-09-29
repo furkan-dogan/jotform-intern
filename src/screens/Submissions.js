@@ -12,6 +12,7 @@ import TextDataChart from '../charts/TextDataChart';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ViewShot from 'react-native-view-shot';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
 
 const Submissions = ({selectedForm}) => {
   const appKey = useSelector(state => state.appKey);
@@ -27,6 +28,9 @@ const Submissions = ({selectedForm}) => {
   const [showDatePicker, setShowDatePicker] = useState(false); // State to control date picker visibility
   const [selectedDate, setSelectedDate] = useState(null);
   const [displayText, setDisplayText] = useState('All time');
+
+  const viewShotRef = useRef();
+
   const handleDateChange = (event, selected) => {
     setShowDatePicker(false);
 
@@ -116,11 +120,24 @@ const Submissions = ({selectedForm}) => {
   const handleDownloadChart = async () => {
     try {
       // Capture the screen as an image
-      const uri = await this.viewShotRef.capture();
+      const uri = await viewShotRef.current.capture();
 
       // Create a PDF document configuration
       const pdfOptions = {
-        html: `<img src="${uri}" />`,
+        html: `
+    <html>
+      <head>
+        <style>
+          Jotform DataChart Downloader
+        </style>
+      </head>
+      <body>
+        <h1>Özel PDF</h1>
+        <p>...</p>
+        <img src="${uri}" />
+      </body>
+    </html>
+  `,
         fileName: 'chart',
         directory: 'Documents',
       };
@@ -131,8 +148,20 @@ const Submissions = ({selectedForm}) => {
       // Get the path to the generated PDF
       const pdfPath = pdf.filePath;
 
-      // Now you can do something with the PDF path, like opening or sharing it
-      console.log('PDF saved to:', pdfPath);
+      // Open the PDF file using the react-native-share library
+      const options = {
+        title: 'Share PDF',
+        url: `file://${pdfPath}`,
+        type: 'application/pdf',
+      };
+
+      Share.open(options)
+        .then(result => {
+          console.log(result);
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -242,7 +271,7 @@ const Submissions = ({selectedForm}) => {
           />
         </View>
         <ViewShot
-          ref={ref => (this.viewShotRef = ref)} // Reference to the ViewShot component
+          ref={viewShotRef} // Reference to the ViewShot component
           options={{format: 'jpg', quality: 0.9}}>
           {selectedChartData === 'pie' && (
             <PieDataChart submissionData={submissionData} />

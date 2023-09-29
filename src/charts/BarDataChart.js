@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {BarChart} from 'react-native-gifted-charts';
 
 const BarDataChart = ({submissionData}) => {
@@ -28,7 +28,6 @@ const BarDataChart = ({submissionData}) => {
   };
 
   const answerCounts = calculateAnswerCounts();
-
   const totalAnswers = submissionData.length;
 
   const barData = Object.entries(answerCounts).map(
@@ -42,14 +41,15 @@ const BarDataChart = ({submissionData}) => {
   return (
     <View>
       <BarChart
-        barWidth={23}
-        textSize={30}
+        barWidth={22}
+        textSize={25}
         textBackgroundRadius={26}
         data={barData}
         barBorderRadius={3}
         yAxisThickness={0}
         xAxisThickness={0}
       />
+      <Text> </Text>
     </View>
   );
 };

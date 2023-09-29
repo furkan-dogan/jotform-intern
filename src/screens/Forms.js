@@ -111,7 +111,7 @@ const Forms = ({}) => {
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => {
-                navigation.navigate('OnboardingPage');
+                navigation.navigate('CreateSummaryReport');
                 setTimeout(() => {
                   setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
                 }, 100);
@@ -125,7 +125,7 @@ const Forms = ({}) => {
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => {
-                navigation.navigate('CreateSummaryReport');
+                //navigation.navigate('CreateSummaryReport');
                 setTimeout(() => {
                   setModalVisible(false); // Modal'ı kapat (timeout sonrasında)
                 }, 100);

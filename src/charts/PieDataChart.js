@@ -3,7 +3,14 @@ import {View, Text} from 'react-native';
 import {PieChart} from 'react-native-gifted-charts';
 
 const PieDataChart = ({submissionData}) => {
-  const colors = ['#0066C3', '#0075E3', '#4DBEFC', '#EDF8FF', '#FC0303'];
+  const colors = [
+    '#C3C8CB',
+    '#4DBEFC',
+    '#419ED1',
+    '#0066C3',
+    '#0075E3',
+    '#0A1551',
+  ];
 
   const calculateAnswerCounts = () => {
     const answerCounts = {};
@@ -72,9 +79,10 @@ const PieDataChart = ({submissionData}) => {
         textBackgroundRadius={26}
         data={pieData}
       />
-      <View style={{flexDirection: 'column', marginLeft: 70}}>
+      <View style={{flexDirection: 'column', marginLeft: 20}}>
         {legendComponents}
       </View>
+      <Text> </Text>
     </View>
   );
 };

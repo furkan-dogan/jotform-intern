@@ -20,6 +20,7 @@ const TextDataChart = ({answer, count}) => {
           </View>
         ))}
       </View>
+      <View style={{height: 20}}></View>
     </View>
   );
 };

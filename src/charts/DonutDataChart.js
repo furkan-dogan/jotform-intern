@@ -3,7 +3,14 @@ import {View, Text} from 'react-native';
 import {PieChart} from 'react-native-gifted-charts';
 
 const DonutDataChart = ({submissionData}) => {
-  const colors = ['#0066C3', '#0075E3', '#4DBEFC', '#EDF8FF', '#FC0303'];
+  const colors = [
+    '#C3C8CB',
+    '#4DBEFC',
+    '#419ED1',
+    '#0066C3',
+    '#0075E3',
+    '#0A1551',
+  ];
 
   const calculateAnswerCounts = () => {
     const answerCounts = {};
@@ -27,12 +34,19 @@ const DonutDataChart = ({submissionData}) => {
           style={{
             height: 18,
             width: 18,
-            marginRight: 10,
             borderRadius: 4,
             backgroundColor: color || 'black',
           }}
         />
-        <Text style={{color: 'black', fontSize: 16}}>{text || ''}</Text>
+        <Text
+          style={{
+            color: 'black',
+            fontSize: 16,
+            marginRight: 10,
+            marginLeft: 5,
+          }}>
+          {text || ''}
+        </Text>
       </View>
     );
   };
@@ -54,12 +68,6 @@ const DonutDataChart = ({submissionData}) => {
     <View key={index}>{renderLegend(data.label, data.color)}</View>
   ));
 
-  const totalSubmissions = submissionData.length;
-  const undefinedCount = submissionData.filter(
-    data => data.answer === undefined,
-  ).length;
-  const validResponsesCount = totalSubmissions - undefinedCount;
-
   return (
     <View style={{marginLeft: 15, marginTop: 10}}>
       <PieChart
@@ -72,16 +80,10 @@ const DonutDataChart = ({submissionData}) => {
         textBackgroundRadius={26}
         data={pieData}
       />
-      <View style={{flexDirection: 'row'}}>{legendComponents}</View>
-      <Text
-        style={{
-          marginTop: 25,
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-        }}>
-        {validResponsesCount} out of {totalSubmissions} people answered
-      </Text>
+      <View style={{flexDirection: 'column', marginLeft: 20}}>
+        {legendComponents}
+      </View>
+      <Text> </Text>
     </View>
   );
 };

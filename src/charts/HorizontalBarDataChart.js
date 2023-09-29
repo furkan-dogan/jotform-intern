@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {BarChart} from 'react-native-gifted-charts';
 
 const HorizontalBarDataChart = ({submissionData}) => {
@@ -37,12 +37,13 @@ const HorizontalBarDataChart = ({submissionData}) => {
       <BarChart
         shiftX={30}
         horizontal
-        barWidth={20}
+        barWidth={30}
         data={barData}
         barBorderRadius={3}
         yAxisThickness={0}
         xAxisThickness={0}
       />
+      <Text> </Text>
     </View>
   );
 };

@@ -1,58 +1,87 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, Button, TouchableOpacity, Image} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
 import SummaryItem from '../components/SummaryItem';
+import ViewShot from 'react-native-view-shot';
+import {useNavigation} from '@react-navigation/native';
 
 const Summary = ({selectedForm, navigationState}) => {
   const appKey = useSelector(state => state.appKey);
   const API_URL = `https://api.jotform.com/form/${selectedForm?.id}/questions?apiKey=${appKey}`;
-
-  const [selectedChartData, setSelectedChartData] = useState(null); // State for selected chart type
   const [questions, setQuestions] = useState([]);
+  const [uri, setUri] = useState();
+  const [isSubmissionRequested, setSubmissionRequested] = useState();
   const navigation = useNavigation();
 
-  // CALCULATE ANSWERS
-  // const validResponsesCount = totalSubmissions - undefinedCount;
-  // const totalSubmissions = submissionData.length;
-  // const undefinedCount = submissionData.filter(
-  //   data => data.answer === undefined,
-  // ).length;
-
-  useEffect(() => {
+  const getSubmissions = () => {
+    if (isSubmissionRequested) {
+      return;
+    }
+    setSubmissionRequested(true);
+    console.log('requested');
     axios
       .get(API_URL)
       .then(response => {
+        console.log('received');
         const {content} = response.data;
         setQuestions(Object.values(content));
       })
       .catch(error => {
         console.error('API isteği sırasında hata oluştu:', error);
+      })
+      .finally(() => {
+        setSubmissionRequested(false);
       });
+  };
+
+  const runSubmissionListener = () => {
+    getSubmissions();
+    const interval = setInterval(() => {
+      getSubmissions();
+    }, 10000);
+    return () => clearInterval(interval);
+  };
+
+  useEffect(() => {
+    return runSubmissionListener();
   }, []);
 
-  return (
+  const viewShotRef = useRef();
+
+  const handleCreateSummaryButtonClick = async () => {
+    const summaryScreenshotUri = await viewShotRef.current.capture();
+    navigationState.navigate('CreateSummaryReport', {
+      selectedForm,
+      summaryScreenshotUri,
+    });
+    console.log(uri);
+  };
+
+  return !questions.length ? null : (
     <ScrollView style={{marginTop: 30}}>
       <View>
-        {questions
-          .filter(question =>
-            [
-              'control_rating',
-              'control_scale',
-              'control_dropdown',
-              'control_radio',
-            ].includes(question.type),
-          )
-          .map((question, index) => (
-            <SummaryItem
-              question={question}
-              key={index}
-              selectedForm={selectedForm}></SummaryItem>
-          ))}
+        <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
+          {questions
+            .filter(question =>
+              [
+                'control_rating',
+                'control_scale',
+                'control_dropdown',
+                'control_radio',
+              ].includes(question.type),
+            )
+            .map((question, index) => (
+              <SummaryItem
+                question={question}
+                key={index}
+                selectedForm={selectedForm}></SummaryItem>
+            ))}
+        </ViewShot>
       </View>
 
+      {/* onPress={handleCreateSummaryButtonClick} */}
       <TouchableOpacity
         onPress={() =>
           navigationState.navigate('CreateSummaryReport', {selectedForm})
